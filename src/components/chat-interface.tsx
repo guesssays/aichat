@@ -11,6 +11,13 @@ import { aiService } from "@/lib/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+type ChatRole = "user" | "assistant" | "system";
+interface ChatMessage {
+  role: ChatRole;
+  content: string;
+}
+
+
 export interface Message {
   id: string;
   content: string;
@@ -64,14 +71,15 @@ export default function ChatInterface({ selectedRole, onRoleChange }: ChatInterf
     setIsLoading(true);
 
     try {
-      const messagesForAI = [
-        { role: "system", content: selectedRole.prompt },
-        ...messages.map(m => ({
-          role: m.sender === "user" ? "user" : "assistant",
-          content: m.content,
-        })),
-        { role: "user", content: input.trim() }
-      ];
+const messagesForAI: ChatMessage[] = [
+  { role: "system", content: selectedRole.prompt },
+  ...messages.map<ChatMessage>(m => ({
+    role: m.sender === "user" ? "user" : "assistant",
+    content: m.content,
+  })),
+  { role: "user", content: input.trim() }
+];
+
 
       const aiResponse = await aiService.sendMessage(messagesForAI);
 
