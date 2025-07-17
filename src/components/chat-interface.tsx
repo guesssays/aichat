@@ -17,7 +17,6 @@ interface ChatMessage {
   content: string;
 }
 
-
 export interface Message {
   id: string;
   content: string;
@@ -71,15 +70,14 @@ export default function ChatInterface({ selectedRole, onRoleChange }: ChatInterf
     setIsLoading(true);
 
     try {
-const messagesForAI: ChatMessage[] = [
-  { role: "system", content: selectedRole.prompt },
-  ...messages.map<ChatMessage>(m => ({
-    role: m.sender === "user" ? "user" : "assistant",
-    content: m.content,
-  })),
-  { role: "user", content: input.trim() }
-];
-
+      const messagesForAI: ChatMessage[] = [
+        { role: "system", content: selectedRole.prompt },
+        ...messages.map<ChatMessage>(m => ({
+          role: m.sender === "user" ? "user" : "assistant",
+          content: m.content,
+        })),
+        { role: "user", content: input.trim() }
+      ];
 
       const aiResponse = await aiService.sendMessage(messagesForAI);
 
@@ -160,9 +158,7 @@ const messagesForAI: ChatMessage[] = [
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex gap-2 sm:gap-3 ${
-                message.sender === "user" ? "justify-end" : "justify-start"
-              } w-full`}
+              className={`flex gap-2 sm:gap-3 ${message.sender === "user" ? "justify-end" : "justify-start"} w-full`}
             >
               {message.sender === "ai" && (
                 <Avatar className="w-7 h-7 sm:w-8 sm:h-8 mt-1">
@@ -178,9 +174,7 @@ const messagesForAI: ChatMessage[] = [
                   break-words
                   markdown-chat
                   text-sm sm:text-base
-                  ${message.sender === "user"
-                    ? "bg-blue-500 text-white"
-                    : "bg-muted"}
+                  ${message.sender === "user" ? "bg-blue-500 text-white" : "bg-muted"}
                 `}
                 style={{
                   maxWidth: "100%",
@@ -191,22 +185,21 @@ const messagesForAI: ChatMessage[] = [
               >
                 <div className="max-w-full break-words overflow-x-auto">
                   <ReactMarkdown
-                    children={message.content}
                     remarkPlugins={[remarkGfm]}
                     components={{
                       a: (props) => (
-                        <a {...props} className="text-blue-400 underline break-all" target="_blank" rel="noopener noreferrer"/>
+                        <a {...props} className="text-blue-400 underline break-all" target="_blank" rel="noopener noreferrer" />
                       ),
                       code: (props) => (
                         <code {...props} className="bg-zinc-900/60 px-1 py-0.5 rounded text-xs overflow-x-auto" />
                       ),
                       p: (props) => <p {...props} className="mb-2 last:mb-0" />
                     }}
-                  />
+                  >
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
-                <p className={`text-[10px] sm:text-xs mt-2 ${
-                  message.sender === "user" ? "text-blue-100" : "text-muted-foreground"
-                }`}>
+                <p className={`text-[10px] sm:text-xs mt-2 ${message.sender === "user" ? "text-blue-100" : "text-muted-foreground"}`}>
                   {formatTime(message.timestamp)}
                 </p>
               </div>
@@ -240,35 +233,33 @@ const messagesForAI: ChatMessage[] = [
         </div>
 
         {/* Форма ввода всегда прижата к низу */}
-{/* Форма ввода всегда прижата к низу */}
-<div className="border-t py-2 px-2 sm:px-4 bg-card w-full">
-  <div className="flex gap-1 sm:gap-2 w-full">
-    <Textarea
-      ref={textareaRef}
-      value={input}
-      onChange={(e) => setInput(e.target.value)}
-      onKeyPress={handleKeyPress}
-      placeholder={`Напишите сообщение для ${selectedRole.name}...`}
-      className="min-h-[38px] sm:min-h-[48px] resize-none text-xs sm:text-sm w-full"
-      disabled={isLoading}
-    />
-    <Button
-      onClick={sendMessage}
-      disabled={!input.trim() || isLoading}
-      size="sm"
-      className="px-3 h-9 sm:h-11"
-    >
-      <Send size={16} />
-    </Button>
-  </div>
-  <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 text-center">
-    Enter — отправить • Shift+Enter — новая строка
-  </p>
-  <p className="text-[11px] sm:text-xs text-yellow-600 dark:text-yellow-400 mt-1 text-center">
-    ⚠️ Ответ от ИИ может занять до 30 секунд. Пожалуйста, дождитесь загрузки.
-  </p>
-</div>
-
+        <div className="border-t py-2 px-2 sm:px-4 bg-card w-full">
+          <div className="flex gap-1 sm:gap-2 w-full">
+            <Textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder={`Напишите сообщение для ${selectedRole.name}...`}
+              className="min-h-[38px] sm:min-h-[48px] resize-none text-xs sm:text-sm w-full"
+              disabled={isLoading}
+            />
+            <Button
+              onClick={sendMessage}
+              disabled={!input.trim() || isLoading}
+              size="sm"
+              className="px-3 h-9 sm:h-11"
+            >
+              <Send size={16} />
+            </Button>
+          </div>
+          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 text-center">
+            Enter — отправить • Shift+Enter — новая строка
+          </p>
+          <p className="text-[11px] sm:text-xs text-yellow-600 dark:text-yellow-400 mt-1 text-center">
+            ⚠️ Ответ от ИИ может занять до 30 секунд. Пожалуйста, дождитесь загрузки.
+          </p>
+        </div>
       </div>
     </Card>
   );
