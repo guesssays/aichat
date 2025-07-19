@@ -14,7 +14,7 @@ export interface ChatResponse {
 
 // Конфигурация API
 export const API_CONFIG = {
-  apiKey: "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",      // <-- СЮДА ВСТАВИТЬ ТОКЕН
+  apiKey: "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",      // <-- СЮДА ВСТАВИТЬ ТОКЕН
   baseUrl: "https://openrouter.ai/api/v1",
   model: "deepseek/deepseek-chat-v3-0324:free",
   maxTokens: 1000,
