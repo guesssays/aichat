@@ -12,33 +12,17 @@ export interface ChatResponse {
   };
 }
 
-// Конфигурация API
 export const API_CONFIG = {
-  apiKey: "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",      // <-- СЮДА ВСТАВИТЬ ТОКЕН
-  baseUrl: "https://openrouter.ai/api/v1",
   model: "deepseek/deepseek-chat-v3-0324:free",
   maxTokens: 1000,
   temperature: 0.7,
-  referer: "https://dcoreaichat.netlify.app", // <-- ВСТАВЬ ТВОЙ ДОМЕН БЕЗ СЛЕША В КОНЦЕ
 };
 
 export class AIService {
-  private apiKey: string;
-  private baseUrl: string;
-
-  constructor(apiKey?: string) {
-    this.apiKey = apiKey || API_CONFIG.apiKey;
-    this.baseUrl = API_CONFIG.baseUrl;
-  }
-
   async sendMessage(
     messages: ChatMessage[],
     systemPrompt?: string
   ): Promise<ChatResponse> {
-    if (!this.apiKey || this.apiKey === "your-api-key-here") {
-      return this.getMockResponse(messages[messages.length - 1].content, systemPrompt);
-    }
-
     try {
       const body = {
         model: API_CONFIG.model,
@@ -49,12 +33,10 @@ export class AIService {
         temperature: API_CONFIG.temperature,
       };
 
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
+      const response = await fetch("/.netlify/functions/chat", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.apiKey}`,
-          "HTTP-Referer": API_CONFIG.referer, // Обязательно!
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(body),
       });
@@ -80,13 +62,12 @@ export class AIService {
     }
   }
 
-  // ... (mock и остальные методы не меняй)
   private getMockResponse(userMessage: string, systemPrompt?: string): ChatResponse {
     const mockResponses = [
-      "Это демо-ответ от AI. Для полноценной работы добавьте ваш API ключ в конфигурацию.",
-      "Спасибо за ваше сообщение! Когда вы настроите API ключ, я смогу давать более развернутые ответы.",
+      "Это демо-ответ от AI. Для полноценной работы добавьте серверную функцию.",
+      "Спасибо за ваше сообщение! Когда вы настроите серверную функцию, я смогу давать развернутые ответы.",
       "Интересный вопрос! После настройки API я смогу обрабатывать ваши запросы с помощью реального искусственного интеллекта.",
-      "Я понимаю ваш запрос. Добавьте API ключ для получения полноценных ответов от AI.",
+      "Я понимаю ваш запрос. Настройте серверную функцию для получения ответов от AI.",
     ];
     const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
     let response = randomResponse;
