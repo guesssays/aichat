@@ -1,15 +1,16 @@
-const fetch = require('node-fetch');
-
-
-
-// !! СЮДА ВСТАВЬ СВОЙ OPENROUTER КЛЮЧ !!
-const OPENROUTER_API_KEY = "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";
-const REFERER = "https://dcoreaichat.netlify.app"; // ТВОЙ домен
+let fetch;
 
 exports.handler = async function(event) {
+  if (!fetch) {
+    fetch = (await import('node-fetch')).default;
+  }
+
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
+
+  const OPENROUTER_API_KEY = "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";
+  const REFERER = "https://dcoreaichat.netlify.app"; // Твой домен без слеша в конце
 
   try {
     const reqBody = JSON.parse(event.body);
@@ -25,6 +26,7 @@ exports.handler = async function(event) {
     });
 
     const data = await response.json();
+
     return {
       statusCode: response.status,
       body: JSON.stringify(data)
