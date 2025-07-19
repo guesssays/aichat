@@ -31,7 +31,7 @@ exports.handler = async function(event) {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": REFERER // вместо "Referer"
+      // "HTTP-Referer": REFERER // вместо "Referer"
       },
       body: JSON.stringify(requestBody)
     });
