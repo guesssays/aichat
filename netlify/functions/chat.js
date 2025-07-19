@@ -9,7 +9,7 @@ exports.handler = async function(event) {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const OPENROUTER_API_KEY = "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";
+  const OPENROUTER_API_KEY = "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";
   const REFERER = "https://dcoreaichat.netlify.app"; // Твой домен без слеша в конце
 
   try {
