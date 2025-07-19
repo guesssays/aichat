@@ -9,8 +9,9 @@ exports.handler = async function(event) {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
+
   const OPENROUTER_API_KEY = "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";
-  const REFERER = "https://dcoreaichat.netlify.app"; // Твой домен без слеша в конце
+   const REFERER = "https://dcoreaichat.netlify.app"; // Ваш домен без слеша
 
   try {
     const reqBody = JSON.parse(event.body);
@@ -20,7 +21,7 @@ exports.handler = async function(event) {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": REFERER
+        "Referer": REFERER // попробуйте так, если HTTP-Referer не срабатывает
       },
       body: JSON.stringify(reqBody)
     });
