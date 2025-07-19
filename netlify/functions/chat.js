@@ -1,4 +1,5 @@
-const { default: fetch } = await import('node-fetch');
+const fetch = require('node-fetch');
+
 
 
 // !! СЮДА ВСТАВЬ СВОЙ OPENROUTER КЛЮЧ !!
