@@ -1,4 +1,5 @@
-const fetch = require("node-fetch");
+const { default: fetch } = await import('node-fetch');
+
 
 // !! СЮДА ВСТАВЬ СВОЙ OPENROUTER КЛЮЧ !!
 const OPENROUTER_API_KEY = "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";
